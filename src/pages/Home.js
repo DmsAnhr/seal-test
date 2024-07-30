@@ -110,8 +110,8 @@ const Home = () => {
       <Carousel activeIndex={currentIndex} onSelect={handleSelect} controls={false} indicators={false}>
         {slides.map((slide, index) => (
           <Carousel.Item key={index}>
-            <div className="d-flex justify-content-between align-items-center">
-              <div className='pe-0 pe-md-5'>
+            <div className="d-flex flex-column-reverse flex-md-row justify-content-between align-items-center">
+              <div className='pe-0 pe-md-5 d-flex flex-column'>
                 <h6 className="mb-4 text-secondary">Headline</h6>
                 <h3>{slide.title}</h3>
                 <p className='text-secondary'>{slide.description}</p>
@@ -123,12 +123,12 @@ const Home = () => {
                   Baca Selengkapnya <i className="bi bi-arrow-up-right ms-2"></i>
                 </a>
               </div>
-              <div>
+              <div className='box-img'>
                 <img
                   src={slide.thumbnail}
                   alt=""
-                  className="d-block w-100 rounded-3"
-                  style={{ maxHeight: '417px', objectFit: 'cover' }}
+                  className="d-block w-100 rounded-3 mb-3 mb-md-0"
+                  style={{ }}
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ const Home = () => {
           <h4 className='news-head-title mb-5'>Berita Terpopuler</h4>
         </Col>
         {popularNews.map((newsItem, index) => (
-          <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-4-news'>
+          <Col lg={4} key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-4-news-h col-12 mb-4 mb-lg-0'>
             <Card className='flex-row rounded-0 border-0 border-end'>
               <h5 style={{ marginTop: "-14px", marginRight: "-20px", zIndex: "99" }}>
                 <Badge bg="dark" className='rounded-pill'>{index + 1}</Badge>
@@ -165,11 +165,11 @@ const Home = () => {
               <Card.Img
                 alt=""
                 src={newsItem.thumbnail}
-                style={{ aspectRatio: "6/5", objectFit: "cover", maxHeight: "137px" }}
+                style={{  }}
               />
-              <Card.Body className='py-0 d-flex flex-column justify-content-between'>
-                <Card.Title style={{fontSize:"1vw"}}>{newsItem.title}</Card.Title>
-                <h6 style={{fontSize:"0.9vw"}}>
+              <Card.Body className='py-0 d-flex flex-column justify-content-center justify-content-lg-between'>
+                <Card.Title style={{fontSize:"16px"}} className='clamp-3'>{newsItem.title}</Card.Title>
+                <h6 style={{fontSize:"14px"}} className='mt-2 mt-lg-0'>
                   <span className='text-primary text-capitalize'>{newsItem.category}</span>
                   <i className="bi bi-dot text-muted"></i>
                   <span className='text-secondary'>{formatDate(newsItem.pubDate)}</span>
@@ -211,16 +211,16 @@ const Home = () => {
         </Col>
       </Row> */}
       <Row className="py-5 my-5">
-        <Col className='col-12 d-flex justify-content-between align-items-center mb-5'>
+        <Col className='col-12 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5'>
           <h4 className='news-head-title mb-0'>Rekomendasi Untuk Anda</h4>
-          <div style={{ width: "30%" }}>
+          <div className='mt-3 mt-md-0 search-news'>
             <Form.Control type="search" placeholder="Cari disini..." value={searchQuery} onChange={handleSearch} />
           </div>
         </Col>
         {currentNews.map((item, index) => (
-          <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={3} key={index} className='mb-0 mb-sm-5 col-3-news'>
+          <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={3} key={index} className='mb-5 col-3-news'>
             <Card className='rounded-0 border-0'>
-              <Card.Img alt="" src={item.thumbnail} style={{ aspectRatio: "5/4", objectFit: "cover", maxHeight: "277px" }} />
+              <Card.Img alt="" src={item.thumbnail} style={{ aspectRatio: "4/3", objectFit: "cover", maxHeight: "277px" }} />
               <Card.Body className='px-1'>
                 <Card.Title className='fs-6 clamp-3 mb-0'>{item.title}</Card.Title>
                 {/* <a href={`/news/${item.category}/${item.link}`} className='text-decoration-none'>
@@ -235,8 +235,8 @@ const Home = () => {
             </h6>
           </Col>
         ))}
-        <Col className='col-12 mt-5 d-flex justify-content-between align-items-center'>
-          <h6 className='fs-7 m-0'>Showing {indexOfFirstNews + 1} to {indexOfLastNews} of {filteredNews.length} results</h6>
+        <Col className='col-12 mt-5 d-flex flex-column flex-md-row justify-content-between align-items-center'>
+          <h6 className='fs-7 mb-3 mb-md-0'>Showing {indexOfFirstNews + 1} to {indexOfLastNews} of {filteredNews.length} results</h6>
           <Pagination className='m-0'>
             <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
               <i className="bi bi-arrow-left-short fs-6 me-1"></i>Previous

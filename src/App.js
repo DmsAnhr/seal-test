@@ -18,7 +18,7 @@ function App() {
   return (
     <Router>
       <AppNavbar />
-      <div className="container mt-3">
+      <div className="container">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/terbaru" element={<Newest />} />

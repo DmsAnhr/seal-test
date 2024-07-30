@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getNewsDetail, getPopularNews, getRealtedThree } from '../services/Api';
+import NewsCard1 from '../components/ui/news1.js';
 import NewsCard4 from '../components/ui/news4.js';
 import NewsCard12 from '../components/ui/news12.js';
 import { Breadcrumb, Container, Row, Col, Form, Button} from 'react-bootstrap';
+import Skeleton from 'react-loading-skeleton';
 import avatar1 from "../assets/images/avatar1.png";
 import avatar2 from "../assets/images/avatar2.png";
 import avatar3 from "../assets/images/avatar3.png";
@@ -58,7 +60,18 @@ const NewsDetail = () => {
     }, [category, link]);
   
     if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <Container style={{height:"100vh"}} className='py-5'>
+          <Skeleton style={{width:"200px", height:"50px"}} className="d-block rounded bg-light mb-4" />
+          <div className='d-flex'>
+            <Skeleton style={{width:"30vw", aspectRatio:"3/2"}} className="d-block rounded bg-light me-3" />
+            <div>
+              <Skeleton style={{width:"30vw", height:"50px"}} className="d-block rounded bg-light mb-4" />
+              <Skeleton style={{width:"30vw", height:"50px"}} className="d-block rounded bg-light mb-4" />
+            </div>
+          </div>
+        </Container>
+      );
     }
   
     if (!newsDetail) {
@@ -81,7 +94,7 @@ const NewsDetail = () => {
         <Row>
           <Col md={8}>
             <h1 className='mb-0'>{newsDetail.title}</h1>
-            <h6 style={{fontSize:"1vw"}} className='py-4'>
+            <h6 style={{fontSize:"16px"}} className='py-4'>
               <span className='text-primary text-capitalize'>{newsDetail.category}</span>
               <i className="bi bi-dot text-muted"></i>
               <span className='text-secondary'>{formatDate(newsDetail.pubDate)}</span>
@@ -138,8 +151,8 @@ const NewsDetail = () => {
               </div>
             </div>
 
-            <div className="pagination-section d-flex justify-content-between align-items-center">
-              <div className='d-flex align-items-center'>
+            <div className="pagination-section d-flex justify-content-center justify-content-md-between align-items-center">
+              <div className='d-none d-md-flex align-items-center'>
                 <span>Item per page</span>
                 <Form.Select aria-label="Items per page" size="sm" className="w-auto mx-2">
                   <option value="5">5</option>
@@ -160,15 +173,20 @@ const NewsDetail = () => {
 
             <div className='d-flex justify-content-between align-items-center mt-5 pt-5 mb-4'>
               <h4 className='news-head-title mb-0'>Rekomendasi Untuk Anda</h4>
-                <Button as="a" href={`/${category}`} variant="outline-primary">Lihat Semua</Button>
+                <Button as="a" href={`/${category}`} variant="outline-primary" className='d-none d-md-block'>Lihat Semua</Button>
             </div>
-            <Row>
+            <Row className='d-none d-md-flex'>
               {relatedNews.map((newsItem, index) => (
                 <NewsCard4 key={index} newsItem={newsItem} index={index} />
               ))}
             </Row>
+            <Row className='d-flex d-md-none'>
+              {relatedNews.map((newsItem, index) => (
+                <NewsCard1 key={index} newsItem={newsItem} index={index} />
+              ))}
+            </Row>
           </Col>
-          <Col md={4}>
+          <Col md={4} className='d-none d-md-block'>
             <Row className='sticky-top' style={{top:"120px",zIndex:"98"}}>
               <h4 className='news-head-title mb-5 ms-2'>Berita Terpopuler</h4>
               {trendingNews.map((newsItem, index) => (

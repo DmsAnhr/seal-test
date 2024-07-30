@@ -60,17 +60,27 @@ nav.scrolled a.text-secondary{
   color: #f2f2f2!important;
 }
 
-.carousel-item img {
-  max-height: 400px;
+.carousel-item .box-img {
+  width: 100%;
+  height: auto;
   object-fit: cover;
 }
+
+.carousel-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .carousel-item {
   display: flex;
   align-items: center;
 }
+
 .carousel-item div {
   flex: 1;
 }
+
 .carousel-control-button {
   font-size: 1.5rem;
   border-radius: 50%;
@@ -80,6 +90,7 @@ nav.scrolled a.text-secondary{
   align-items: center;
   justify-content: center;
 }
+
 .carousel-info {
   font-size: 1.2rem;
 }
@@ -89,7 +100,7 @@ nav.scrolled a.text-secondary{
   padding-left: 14px;
 }
 
-.col-4-news{
+.col-3-news{
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -97,9 +108,16 @@ nav.scrolled a.text-secondary{
   text-decoration: none;
 }
 
-.col-3-news{
+.col-1-news, .col-4-news, .col-4-news-h, .col-12-news{
   cursor: pointer;
   text-decoration: none;
+}
+
+.col-4-news-h img{
+  object-fit: cover;
+  max-height: unset;
+  width: 40%;
+  aspect-ratio: unset;
 }
 
 p.img-thumb{
@@ -113,7 +131,7 @@ p.main-news{
 }
 
 .comment .text-muted{
-  color: #959EA9;
+  color: #959EA9!important;
 }
 
 footer{
@@ -122,4 +140,25 @@ footer{
 
 footer a{
   text-decoration: none!important;
+}
+
+.search-news{
+  width: 100%;
+}
+
+@media (min-width: 768px){
+  .carousel-item img{
+    max-height: 417px;
+  }
+  .search-news{
+    width: 30%;
+  }
+}
+
+@media (min-width: 992px){
+  .col-4-news-h img{
+    object-fit: cover;
+    max-height: 137px;
+    aspect-ratio: 6/5;
+  }
 }

@@ -26,7 +26,7 @@ const news4 = ({ newsItem, index }) => {
         <h6 className='px-1'>
             <span className='text-primary text-capitalize'>{newsItem.category}</span>
             <i className="bi bi-dot text-muted"></i>
-            <span className='text-secondary'>{formatDate(newsItem.pubDate)}</span>
+            <span className='text-muted'>{formatDate(newsItem.pubDate)}</span>
         </h6>
     </Col>
   );

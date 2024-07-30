@@ -4,9 +4,9 @@ import logo from '../../assets/images/logo-w.png'
 
 const Footer = () => {
   return (
-    <footer className="text-light pt-5 pb-3 mt-5">
+    <footer className="text-light pt-2 pt-md-5 pb-2 pb-md-3 mt-5">
       <Container>
-        <Row>
+        <Row className='d-none d-md-flex'>
           <Col md={4}>
             <div className='d-flex align-items-center'>
               <img alt="" src={logo} width={67}/>
@@ -55,6 +55,9 @@ const Footer = () => {
               </Form.Group>
             </Form>
           </Col>
+        </Row>
+        <Row className='d-flex d-md-none'>
+          <Col>&copy; 2024 Berita Kini</Col>
         </Row>
       </Container>
     </footer>

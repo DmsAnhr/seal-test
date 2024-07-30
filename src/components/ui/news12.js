@@ -27,7 +27,7 @@ const news12 = ({ newsItem, index }) => {
           style={{ aspectRatio: "6/5", objectFit: "cover", width: "100px" }}
         />
         <Card.Body className='py-0 d-flex flex-column justify-content-between'>
-          <Card.Title style={{ fontSize: "1vw" }}>{newsItem.title}</Card.Title>
+          <Card.Title style={{ fontSize: "1vw" }} className='clamp-3'>{newsItem.title}</Card.Title>
           <h6 style={{ fontSize: "0.9vw" }}>
             <span className='text-primary text-capitalize'>{newsItem.category}</span>
             <i className="bi bi-dot text-muted"></i>

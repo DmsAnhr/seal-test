@@ -16,7 +16,7 @@ const news1 = ({ newsItem, index }) => {
     };
     
   return (
-    <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-1-news'>
+    <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-1-news col-12'>
       <Card className='rounded-0 border-0 w-100 mb-4'>
         <Card.Body className='py-0 d-flex px-0 px-md-3'>
           <Card.Img
@@ -24,8 +24,8 @@ const news1 = ({ newsItem, index }) => {
             src={newsItem.thumbnail}
             style={{objectFit: "cover", width:"35%", height: "137px" }}
           />
-          <div className=' d-flex flex-column justify-content-center ps-3' style={{width:'65%'}}>
-            <Card.Title style={{fontSize:"20px"}}>
+          <div className='d-flex flex-column justify-content-center ps-3' style={{width:'65%'}}>
+            <Card.Title style={{fontSize:"20px"}} className='clamp-3'>
               {newsItem.title}
               </Card.Title>
             <h6 style={{fontSize:"14px"}} className='mt-2'>
