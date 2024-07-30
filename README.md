@@ -1,4 +1,4 @@
-# Berita Kini (Seal Test Recruitment)
+# Berita Kini (SEAL intern recruitment test)
 
 This project has been hosted at [Berita Kini](https://seal-test.vercel.app/).
 
