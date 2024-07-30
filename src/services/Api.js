@@ -10,20 +10,27 @@ const apiUrls = [
   { url: 'gayaHidup', category: 'gayaHidup' }
 ];
 
-const fetchAllNews = async () => {
+export const getNewscategory  = async (categories) => {
   try {
-    const responses = await Promise.all(
-      apiUrls.map(async ({ url, category }) => {
-        const response = await fetch(`${BASE_URL}/${url}`);
-        const data = await response.json();
-        return data.data.posts.map(post => ({ ...post, category }));
-      })
-    );
-    const allPosts = responses.flat();
-    return allPosts;
+    const response = await fetch(`${BASE_URL}/${categories}`);
+    const data = await response.json();
+    const postsWithCategory = data.data.posts.map(post => ({ ...post, category: categories }));
+    return postsWithCategory;
   } catch (error) {
-    console.error('Error fetching news:', error);
-    return [];
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+export const getNewsDetail = async (category) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${category}`);
+    const data = await response.json();
+    const postsWithCategory = data.data.posts.map(post => ({ ...post, category }));
+    return postsWithCategory;
+  } catch (error) {
+    console.error('Error fetching data by category:', error);
+    throw error;
   }
 };
 
@@ -63,52 +70,6 @@ export const getPopularNews = async () => {
   } catch (error) {
     console.error('Error fetching popular news:', error);
     return [];
-  }
-};
-
-const fetchNews = async (endpoint) => {
-  try {
-    const response = await fetch(`${BASE_URL}/${endpoint}`);
-    const data = await response.json();
-    const categories = endpoint;
-    const postsWithCategory = data.data.posts.map(post => ({ ...post, category: categories }));
-    return postsWithCategory;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
-};
-
-export const getLatestNews = () => fetchNews('terbaru');
-export const getNationalNews = () => fetchNews('nasional');
-export const getInternationalNews = () => fetchNews('internasional');
-export const getEconomyNews = () => fetchNews('ekonomi');
-export const getSportNews = () => fetchNews('olahraga');
-export const getTechnologyNews = () => fetchNews('teknologi');
-export const getEntertainmentNews = () => fetchNews('hiburan');
-export const getLifestyleNews = () => fetchNews('gayaHidup');
-export const getAllNews = () => fetchAllNews();
-export const getNewsByLink = async (category, link) => {
-  try {
-    const response = await fetch(`https://api-berita-indonesia.vercel.app/cnn/${category}`);
-    const data = await response.json();
-    const newsItem = data.data.posts.find(post => post.link.endsWith(link));
-    return newsItem;
-  } catch (error) {
-    console.error('Error fetching news by link:', error);
-    throw error;
-  }
-};
-
-export const getNewsByCategory = async (category) => {
-  try {
-    const response = await fetch(`${BASE_URL}/${category}`);
-    const data = await response.json();
-    const postsWithCategory = data.data.posts.map(post => ({ ...post, category }));
-    return postsWithCategory;
-  } catch (error) {
-    console.error('Error fetching data by category:', error);
-    throw error;
   }
 };
 
