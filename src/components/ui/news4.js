@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Badge } from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
 
 const news4 = ({ newsItem, index }) => {
 

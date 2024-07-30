@@ -15,29 +15,29 @@ const Footer = () => {
             <p className='mt-3'>© 2023 Berita Kini. All Rights Reserved.</p>
             <h5 className='mt-5'>Ikuti Kami</h5>
             <div className="d-flex">
-              <a href="#" className="fs-5 me-3 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-youtube"></i></a>
-              <a href="#" className="fs-5 me-3 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-instagram"></i></a>
-              <a href="#" className="fs-5 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-facebook"></i></a>
+              <a href="youtube.com" className="fs-5 me-3 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-youtube"></i></a>
+              <a href="instagram.com" className="fs-5 me-3 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-instagram"></i></a>
+              <a href="facebook.com" className="fs-5 px-2 rounded rounded-3 bg-light text-dark"><i className="bi bi-facebook"></i></a>
             </div>
           </Col>
           <Col md={2}>
             <h5>Telusuri</h5>
             <ul className="list-unstyled">
-              <li className='mb-2'><a href="#" className="text-light">Beranda</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Kesehatan</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Otomotif</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Politik</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Olahraga</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Nasional</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Internasional</a></li>
+              <li className='mb-2'><a href="/beranda" className="text-light">Beranda</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Kesehatan</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Otomotif</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Politik</a></li>
+              <li className='mb-2'><a href="/gaya-hidup" className="text-light">Gaya Hidup</a></li>
+              <li className='mb-2'><a href="/nasional" className="text-light">Nasional</a></li>
+              <li className='mb-2'><a href="/internasional" className="text-light">Internasional</a></li>
             </ul>
           </Col>
           <Col md={2}>
             <h5>Bantuan</h5>
             <ul className="list-unstyled">
-              <li className='mb-2'><a href="#" className="text-light">Kontak Kami</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Laporan Pembajakan</a></li>
-              <li className='mb-2'><a href="#" className="text-light">Kebijakan</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Kontak Kami</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Laporan Pembajakan</a></li>
+              <li className='mb-2'><a href="/" className="text-light">Kebijakan</a></li>
             </ul>
           </Col>
           <Col md={4}>
