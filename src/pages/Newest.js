@@ -71,7 +71,7 @@ const Newest = () => {
       <Container>
         <Row>
           <Col className="col-12">
-            <h1 className='news-head-title my-5'>Berita <span className=' text-capitalize'>{category}</span></h1>
+            <h1 className='news-head-title my-5 text-capitalize'>{category}</h1>
           </Col>
         </Row>
         <Row>
