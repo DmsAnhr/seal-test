@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getNewsByCategory, getAllNews,getPopularNews, getRealtedThree } from '../services/Api';
-import { Breadcrumb, Container, Row, Col, Form, Button, Card, Badge  } from 'react-bootstrap';
+import { getNewsDetail, getPopularNews, getRealtedThree } from '../services/Api';
+import NewsCard4 from '../components/ui/news4.js';
+import NewsCard12 from '../components/ui/news12.js';
+import { Breadcrumb, Container, Row, Col, Form, Button} from 'react-bootstrap';
 import avatar1 from "../assets/images/avatar1.png";
 import avatar2 from "../assets/images/avatar2.png";
 import avatar3 from "../assets/images/avatar3.png";
@@ -12,13 +14,6 @@ const NewsDetail = () => {
     const [trendingNews, setTrendingNews] = useState([]);
     const [relatedNews, setRelatedNews] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const removeBaseUrl = (url) => {
-      const baseUrl = 'https://www.cnnindonesia.com/';
-      const raw = url.replace(baseUrl, '')
-      
-      return encodeURIComponent(raw);
-    };
   
     const formatDate = (dateString) => {
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -29,7 +24,7 @@ const NewsDetail = () => {
       const fetchNewsDetail = async () => {
         try {
           const decodedLink = decodeURIComponent(link);
-          const allPosts = await getNewsByCategory(category);
+          const allPosts = await getNewsDetail(category);
           const selectedPost = allPosts.find(post => post.link.endsWith(decodedLink));
           setNewsDetail(selectedPost);
           setLoading(false);
@@ -168,47 +163,16 @@ const NewsDetail = () => {
                 <Button as="a" href={`/${category}`} variant="outline-primary">Lihat Semua</Button>
             </div>
             <Row>
-              {relatedNews.map((item, index) => (
-                <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={4} key={index} className='mb-0 mb-sm-5 col-4-news'>
-                  <Card className='rounded-0 border-0'>
-                    <Card.Img alt="" src={item.thumbnail} style={{ aspectRatio: "5/4", objectFit: "cover", maxHeight: "277px" }} />
-                    <Card.Body className='px-1'>
-                      <Card.Title className='fs-6 clamp-3 mb-0'>{item.title}</Card.Title>
-                    </Card.Body>
-                  </Card>
-                  <h6 className='px-1'>
-                    <span className='text-primary text-capitalize'>{item.category}</span>
-                    <i className="bi bi-dot text-muted"></i>
-                    <span className='text-secondary'>{formatDate(item.pubDate)}</span>
-                  </h6>
-                </Col>
+              {relatedNews.map((newsItem, index) => (
+                <NewsCard4 key={index} newsItem={newsItem} index={index} />
               ))}
             </Row>
           </Col>
           <Col md={4}>
-            <Row className='sticky-top' style={{top:"150px",zIndex:"98"}}>
+            <Row className='sticky-top' style={{top:"120px",zIndex:"98"}}>
               <h4 className='news-head-title mb-5 ms-2'>Berita Terpopuler</h4>
               {trendingNews.map((newsItem, index) => (
-                <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-3-news col-12 mb-4'>
-                  <Card className='flex-row rounded-0 border-0 border-bottom pb-4'>
-                    <h5 style={{ marginTop: "-14px", marginRight: "-20px", zIndex: "99" }}>
-                      <Badge bg="dark" className='rounded-pill'>{index + 1}</Badge>
-                    </h5>
-                    <Card.Img
-                      alt=""
-                      src={newsItem.thumbnail}
-                      style={{ aspectRatio: "6/5", objectFit: "cover", width: "100px" }}
-                    />
-                    <Card.Body className='py-0 d-flex flex-column justify-content-between'>
-                      <Card.Title style={{fontSize:"1vw"}}>{newsItem.title}</Card.Title>
-                      <h6 style={{fontSize:"0.9vw"}}>
-                        <span className='text-primary text-capitalize'>{newsItem.category}</span>
-                        <i className="bi bi-dot text-muted"></i>
-                        <span className='text-secondary'>{formatDate(newsItem.pubDate)}</span>
-                      </h6>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                <NewsCard12 key={index} newsItem={newsItem} index={index} />
               ))}
             </Row>
           </Col>

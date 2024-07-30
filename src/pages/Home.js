@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLatestNews, getAllNews,getPopularNews, getRecomNews } from '../services/Api';
+import { getNewscategory, getPopularNews, getRecomNews } from '../services/Api';
 import { Carousel, Container, Button, Row, Col, Card, Badge, Pagination, Form} from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
 import slide from '../assets/images/slide.png';
@@ -30,7 +30,7 @@ const Home = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const data = await getLatestNews();
+        const data = await getNewscategory('terbaru');
         const sortedPosts = data
           .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
           .slice(0, 5);
@@ -157,7 +157,7 @@ const Home = () => {
           <h4 className='news-head-title mb-5'>Berita Terpopuler</h4>
         </Col>
         {popularNews.map((newsItem, index) => (
-          <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-3-news'>
+          <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-4-news'>
             <Card className='flex-row rounded-0 border-0 border-end'>
               <h5 style={{ marginTop: "-14px", marginRight: "-20px", zIndex: "99" }}>
                 <Badge bg="dark" className='rounded-pill'>{index + 1}</Badge>
@@ -218,7 +218,7 @@ const Home = () => {
           </div>
         </Col>
         {currentNews.map((item, index) => (
-          <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={3} key={index} className='mb-0 mb-sm-5 col-4-news'>
+          <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={3} key={index} className='mb-0 mb-sm-5 col-3-news'>
             <Card className='rounded-0 border-0'>
               <Card.Img alt="" src={item.thumbnail} style={{ aspectRatio: "5/4", objectFit: "cover", maxHeight: "277px" }} />
               <Card.Body className='px-1'>
