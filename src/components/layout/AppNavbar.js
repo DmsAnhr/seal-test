@@ -8,7 +8,8 @@ const AppNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = () => {
-    if (window.scrollY > 50) { // Adjust the value as needed
+    console.log(window.scrollY);
+    if (window.scrollY > 60) {
       setScrolled(true);
     } else {
       setScrolled(false);
@@ -24,11 +25,12 @@ const AppNavbar = () => {
 
   return (
     <Navbar
-      bg={scrolled ? "primary" : "white"} // Change the background color based on scroll
-      variant={scrolled ? "dark" : "light"} // Optionally change text color based on scroll
+      bg={scrolled ? "primary" : "white"}
+      variant={scrolled ? "dark" : "light"}
       expand="md"
-      className={`${scrolled ? 'scrolled' : 'border-bottom'}`} // Add a class when scrolled
+      className={`${scrolled ? 'scrolled' : 'border-bottom'}`}
       sticky="top"
+      style={{zIndex:"99"}}
     >
       <Container>
         <Navbar.Brand href="/" className='d-flex align-items-center'>
@@ -59,12 +61,12 @@ const AppNavbar = () => {
             <NavLink to="/olahraga" className={({ isActive }) => `me-3 ${isActive ? 'text-primary' : 'text-secondary'}`}>
               Olahraga
             </NavLink>
-            <NavLink to="/teknologi" className={({ isActive }) => `me-3 ${isActive ? 'text-primary' : 'text-secondary'}`}>
+            {/* <NavLink to="/teknologi" className={({ isActive }) => `me-3 ${isActive ? 'text-primary' : 'text-secondary'}`}>
               Teknologi
             </NavLink>
             <NavLink to="/ekonomi" className={({ isActive }) => `me-3 ${isActive ? 'text-primary' : 'text-secondary'}`}>
               Ekonomi
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/nasional" className={({ isActive }) => `me-3 ${isActive ? 'text-primary' : 'text-secondary'}`}>
               Nasional
             </NavLink>

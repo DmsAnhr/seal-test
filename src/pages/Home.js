@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getLatestNews, getAllNews } from '../services/Api';
-import { Carousel, Container, Button, Row, Col, Card, Badge, Pagination} from 'react-bootstrap';
+import { getLatestNews, getAllNews,getPopularNews, getRecomNews } from '../services/Api';
+import { Carousel, Container, Button, Row, Col, Card, Badge, Pagination, Form} from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
 import slide from '../assets/images/slide.png';
 
 const Home = () => {
   const [slides, setSlides] = useState([]);
+  const [popularNews, setPopularNews] = useState([]);
+  const [recom, setRecom] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const newsPerPage = 8;
   const [imageIndex, setImageIndex] = useState(0);
-  const [news, setNews] = useState([]);
 
   const removeBaseUrl = (url) => {
     const baseUrl = 'https://www.cnnindonesia.com/';
@@ -27,10 +30,10 @@ const Home = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const data = await getLatestNews(); // Tidak ada .data.posts
+        const data = await getLatestNews();
         const sortedPosts = data
-          .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate)) // Sortir berdasarkan pubDate
-          .slice(0, 5); // Ambil 5 data terbaru
+          .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+          .slice(0, 5);
         setSlides(sortedPosts);
         setLoading(false);
       } catch (error) {
@@ -39,34 +42,23 @@ const Home = () => {
       }
     };
 
-    const fetchAndSetNews = async () => {
-      const allPosts = await getAllNews();
-      if (allPosts.length > 0) {
-        allPosts.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-        const uniqueLinks = new Set();
-        const randomPosts = [];
-        
-        const topPosts = allPosts.slice(0, 8);
-        
-        while (randomPosts.length < 3 && topPosts.length > 0) {
-          const randomIndex = Math.floor(Math.random() * topPosts.length);
-          const selectedPost = topPosts[randomIndex];
-          
-          if (!uniqueLinks.has(selectedPost.link)) {
-            randomPosts.push(selectedPost);
-            uniqueLinks.add(selectedPost.link);
-          }
-          
-          topPosts.splice(randomIndex, 1);
-        }
-        
-        setNews(randomPosts);
+    const fetchPopularNews = async () => {
+      try {
+        const data = await getPopularNews();
+        setPopularNews(data);
+      } catch (error) {
+        console.error('Error fetching related news:', error);
       }
     };
 
-    fetchAndSetNews();
+    const fetchNewsRecom = async () => {
+      const recomNews = await getRecomNews();
+      setRecom(recomNews);
+    };
+
     fetchSlides();
+    fetchPopularNews();
+    fetchNewsRecom();
   }, []);
 
   const handleSelect = (selectedIndex) => {
@@ -76,7 +68,21 @@ const Home = () => {
   const handleImageSelect = (selectedIndex) => {
     setImageIndex(selectedIndex);
   };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredNews = recom.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
+  const indexOfLastNews = currentPage * newsPerPage;
+  const indexOfFirstNews = indexOfLastNews - newsPerPage;
+  const currentNews = filteredNews.slice(indexOfFirstNews, indexOfLastNews);
+
+  const totalPages = Math.ceil(filteredNews.length / newsPerPage);
+
   const images = [slide, slide, slide];
 
   if (loading) {
@@ -150,8 +156,8 @@ const Home = () => {
         <Col className='col-12'>
           <h4 className='news-head-title mb-5'>Berita Terpopuler</h4>
         </Col>
-        {news.map((newsItem, index) => (
-          <Col key={index}>
+        {popularNews.map((newsItem, index) => (
+          <Col key={index} as="a" href={`/news/${newsItem.category}/${removeBaseUrl(newsItem.link)}`} className='col-3-news'>
             <Card className='flex-row rounded-0 border-0 border-end'>
               <h5 style={{ marginTop: "-14px", marginRight: "-20px", zIndex: "99" }}>
                 <Badge bg="dark" className='rounded-pill'>{index + 1}</Badge>
@@ -164,7 +170,7 @@ const Home = () => {
               <Card.Body className='py-0 d-flex flex-column justify-content-between'>
                 <Card.Title style={{fontSize:"1vw"}}>{newsItem.title}</Card.Title>
                 <h6 style={{fontSize:"0.9vw"}}>
-                  <span className='text-primary'>{newsItem.category}</span>
+                  <span className='text-primary text-capitalize'>{newsItem.category}</span>
                   <i className="bi bi-dot text-muted"></i>
                   <span className='text-secondary'>{formatDate(newsItem.pubDate)}</span>
                 </h6>
@@ -173,73 +179,12 @@ const Home = () => {
           </Col>
         ))}
       </Row>
-      <Row className="py-5 my-5">
-        <Col className='col-12 d-flex justify-content-between'>
-          <h4 className='news-head-title mb-5'>Rekomendasi Untuk Anda</h4>
-          <div style={{height:"30px",width:"90px",backgroundColor:"red"}}></div>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col sm={3}>
-          <Card className='rounded-0 border-0'>
-            <Card.Img alt="" src="https://akcdn.detik.net.id/visual/2024/07/29/olympics-2024-shooting_169.jpeg?w=360&q=90" style={{aspectRatio:"5/",objectFit:"cover",maxHeight:"277px"}} />
-            <Card.Body className='px-1'>
-              <Card.Title className='fs-6'>Klasemen Medali Emas ASEAN Sepanjang Sejarah Olimpiade</Card.Title>
-              <h6 className='mt-4'><span className='text-primary'>Politik</span><i className="bi bi-dot text-muted"></i><span className='text-secondary'>29 Juli 2024</span></h6>
-            </Card.Body>
-          </Card>
+      {/* <Row className="py-5 my-5">
+        <Col className='col-12 d-flex justify-content-between align-items-center mb-5'>
+          <h4 className='news-head-title mb-0'>Rekomendasi Untuk Anda</h4>
+          <div style={{width:"30%"}}>
+            <Form.Control type="search" placeholder="Cari disini..." />
+          </div>
         </Col>
         <Col sm={3}>
           <Card className='rounded-0 border-0'>
@@ -262,6 +207,48 @@ const Home = () => {
             <Pagination.Item>{8}</Pagination.Item>
             <Pagination.Item>{9}</Pagination.Item>
             <Pagination.Next>Next<i className="bi bi-arrow-right-short fs-6 ms-1"></i></Pagination.Next>
+          </Pagination>
+        </Col>
+      </Row> */}
+      <Row className="py-5 my-5">
+        <Col className='col-12 d-flex justify-content-between align-items-center mb-5'>
+          <h4 className='news-head-title mb-0'>Rekomendasi Untuk Anda</h4>
+          <div style={{ width: "30%" }}>
+            <Form.Control type="search" placeholder="Cari disini..." value={searchQuery} onChange={handleSearch} />
+          </div>
+        </Col>
+        {currentNews.map((item, index) => (
+          <Col as="a" href={`/news/${item.category}/${removeBaseUrl(item.link)}`} sm={3} key={index} className='mb-0 mb-sm-5 col-4-news'>
+            <Card className='rounded-0 border-0'>
+              <Card.Img alt="" src={item.thumbnail} style={{ aspectRatio: "5/4", objectFit: "cover", maxHeight: "277px" }} />
+              <Card.Body className='px-1'>
+                <Card.Title className='fs-6 clamp-3 mb-0'>{item.title}</Card.Title>
+                {/* <a href={`/news/${item.category}/${item.link}`} className='text-decoration-none'>
+                  Baca Selengkapnya <i className="bi bi-arrow-up-right ms-2"></i>
+                </a> */}
+              </Card.Body>
+            </Card>
+            <h6 className='px-1'>
+              <span className='text-primary text-capitalize'>{item.category}</span>
+              <i className="bi bi-dot text-muted"></i>
+              <span className='text-secondary'>{formatDate(item.pubDate)}</span>
+            </h6>
+          </Col>
+        ))}
+        <Col className='col-12 mt-5 d-flex justify-content-between align-items-center'>
+          <h6 className='fs-7 m-0'>Showing {indexOfFirstNews + 1} to {indexOfLastNews} of {filteredNews.length} results</h6>
+          <Pagination className='m-0'>
+            <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
+              <i className="bi bi-arrow-left-short fs-6 me-1"></i>Previous
+            </Pagination.Prev>
+            {[...Array(totalPages).keys()].map(number => (
+              <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
+                {number + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}>
+              Next<i className="bi bi-arrow-right-short fs-6 ms-1"></i>
+            </Pagination.Next>
           </Pagination>
         </Col>
       </Row>
